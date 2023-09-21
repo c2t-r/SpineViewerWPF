@@ -69,10 +69,13 @@ namespace SpineViewerWPF.Windows
                 {
                     tb_JS_file.Text = App.globalValues.SelectSpineFile;
                 }
+                //var atlasSize = Common.GetAtlasSize(App.globalValues.SelectAtlasFile);
+                //if (atlasSize != null)
+                //{
+                //    tb_Canvas_X.Text = atlasSize.Value.Width.ToString();
+                //    tb_Canvas_Y.Text = atlasSize.Value.Height.ToString();
+                //}
             }
-            
-
-
         }
 
         private void btn_JS_Open_Click(object sender, RoutedEventArgs e)

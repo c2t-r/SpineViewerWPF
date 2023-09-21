@@ -11,6 +11,8 @@ using System;
 using System.Collections.Generic;
 using System.Drawing;
 using System.IO;
+using System.Linq;
+using System.Text.RegularExpressions;
 using System.Threading;
 using System.Windows;
 using System.Windows.Media.Imaging;
@@ -62,7 +64,13 @@ public class Common
     public static bool IsBinaryData(string path)
     {
         if (File.Exists(path.Replace(".atlas", ".skel")) && path.IndexOf(".skel") > -1)
+        {
             return true;
+        }
+        else if (File.Exists(path.Replace(".atlas", ".bin")) && path.IndexOf(".bin") > -1)
+        {
+            return true;
+        }
         else
             return false;
     }
@@ -71,7 +79,6 @@ public class Common
     {
         if (File.Exists(path.Replace(".atlas", ".skel")))
         {
-
             App.globalValues.SelectSpineFile = path.Replace(".atlas", ".skel");
             return true;
         }
@@ -80,12 +87,33 @@ public class Common
             App.globalValues.SelectSpineFile = path.Replace(".atlas", ".json");
             return true;
         }
+        else if (File.Exists(path.Replace(".atlas", ".bin")))
+        {
+            App.globalValues.SelectSpineFile = path.Replace(".atlas", ".bin");
+            return true;
+        }
         else
         {
             App.globalValues.SelectSpineFile = "";
             return false;
         }
           
+    }
+
+    public static System.Drawing.Size? GetAtlasSize(string atlasFilePath)
+    {
+        if (!File.Exists(atlasFilePath))
+            return null;
+        string[] lines =  File.ReadAllLines(atlasFilePath);
+        string sizeLine = lines.FirstOrDefault(a => a.StartsWith("size:"));
+        if(string.IsNullOrEmpty(sizeLine)) 
+            return null;
+        Regex r = new Regex("size:\\s?(\\d+),\\s?(\\d+)", RegexOptions.IgnoreCase);
+        Match m = r.Match(sizeLine);
+        if (!m.Success)
+            return null;
+        return new System.Drawing.Size(Convert.ToInt32(m.Groups[1].Value), Convert.ToInt32(m.Groups[1].Value));
+
     }
 
 

@@ -117,6 +117,8 @@ namespace SpineViewerWPF
 
         public static void SetCBAnimeName()
         {
+            MasterMain.cb_AnimeList.Items.Clear();
+            MasterMain.cb_SkinList.Items.Clear();
             for (int i = 0; i < App.globalValues.AnimeList.Count; i++)
             {
                 MasterMain.cb_AnimeList.Items.Add(App.globalValues.AnimeList[i]);
