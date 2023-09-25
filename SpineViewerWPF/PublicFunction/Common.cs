@@ -19,6 +19,9 @@ using System.Windows.Media.Imaging;
 
 public class Common
 {
+    public static string[] SpineFileExtensions = { ".skel.bytes", ".json", ".skel", ".bytes", ".bin" };
+    public static string[] AtlasFileExtension = { ".atlas.txt", ".atlas" };
+
     public static void Reset()
     {
         App.globalValues.PosX = 0;
@@ -63,40 +66,33 @@ public class Common
 
     public static bool IsBinaryData(string path)
     {
-        if (File.Exists(path.Replace(".atlas", ".skel")) && path.IndexOf(".skel") > -1)
+        if (Path.GetExtension(path).ToLower() == ".json")
         {
-            return true;
-        }
-        else if (File.Exists(path.Replace(".atlas", ".bin")) && path.IndexOf(".bin") > -1)
-        {
-            return true;
+            return false;
         }
         else
-            return false;
+            return true;
     }
 
     public static bool CheckSpineFile(string path)
     {
-        if (File.Exists(path.Replace(".atlas", ".skel")))
+        string safeFileName = Path.GetFileName(path);
+        string directoryPath = Path.GetDirectoryName(path);
+        string atlasRealExt = AtlasFileExtension.FirstOrDefault(a => safeFileName.ToLower().EndsWith(a.ToLower()));
+        safeFileName = safeFileName.Replace(atlasRealExt, "");
+
+        foreach (var item in SpineFileExtensions)
         {
-            App.globalValues.SelectSpineFile = path.Replace(".atlas", ".skel");
-            return true;
+            string spineFilePath = Path.Combine(directoryPath, safeFileName + item);
+            if (File.Exists(spineFilePath))
+            {
+                App.globalValues.SelectSpineFile = spineFilePath;
+                return true;
+            }
         }
-        else if (File.Exists(path.Replace(".atlas", ".json")))
-        {
-            App.globalValues.SelectSpineFile = path.Replace(".atlas", ".json");
-            return true;
-        }
-        else if (File.Exists(path.Replace(".atlas", ".bin")))
-        {
-            App.globalValues.SelectSpineFile = path.Replace(".atlas", ".bin");
-            return true;
-        }
-        else
-        {
-            App.globalValues.SelectSpineFile = "";
-            return false;
-        }
+
+        App.globalValues.SelectSpineFile = "";
+        return false;
           
     }
 

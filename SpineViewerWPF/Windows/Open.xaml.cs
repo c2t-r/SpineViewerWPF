@@ -50,7 +50,7 @@ namespace SpineViewerWPF.Windows
 
         private void btn_Altas_Open_Click(object sender, RoutedEventArgs e)
         {
-           bool isSelect = SelectFile("Spine Altas File (*.atlas)|*.atlas;", tb_Atlas_File);
+           bool isSelect = SelectFile("Spine Altas File (*.atlas, *.atlas.txt)|*.atlas;*.atlas.txt", tb_Atlas_File);
 
             if (isSelect)
             {

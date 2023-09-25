@@ -94,10 +94,10 @@ public class Player_3_8_95 : IPlayer
 
         if (App.isNew)
         {
-            //App.globalValues.PosX = (float)App.canvasWidth/2;
-            //App.globalValues.PosY = (float)App.canvasHeight/2;
-            App.globalValues.PosX = ((float)App.canvasWidth / 2) - (skeletonData.Width / 2) - skeletonData.X;
-            App.globalValues.PosY = (float)App.canvasHeight - skeletonData.height - skeletonData.Y;
+            App.globalValues.PosX = (float)App.canvasWidth/2;
+            App.globalValues.PosY = (float)App.canvasHeight/2;
+            //App.globalValues.PosX = ((float)App.canvasWidth / 2) - (skeletonData.Width / 2) - skeletonData.X;
+            //App.globalValues.PosY = (float)App.canvasHeight - skeletonData.height - skeletonData.Y;
             MainWindow.SetCBAnimeName();
         }
         App.isNew = false;
