@@ -1,4 +1,5 @@
 ﻿using Microsoft.Xna.Framework.Graphics;
+using SpineViewerWPF.PublicFunction;
 using System;
 using System.Collections.Generic;
 using System.Configuration;
@@ -32,6 +33,7 @@ namespace SpineViewerWPF
         public static double canvasHeight = SystemParameters.WorkArea.Height;
         public static double mainWidth ;
         public static double mainHeight ;
+        
 
         public static  string tempDirPath = $"{App.rootDir}\\Temp\\";
     }

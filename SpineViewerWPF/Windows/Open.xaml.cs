@@ -41,6 +41,10 @@ namespace SpineViewerWPF.Windows
             if (App.globalValues.SelectSpineFile != "") {
                 tb_JS_file.Text = App.globalValues.SelectSpineFile;
             }
+            if (App.globalValues.Scale != 1 && App.globalValues.Scale != 0)
+            {
+                tb_Canvas_scale.Text = App.globalValues.Scale.ToString();
+            }
    
 
 
@@ -51,7 +55,6 @@ namespace SpineViewerWPF.Windows
         private void btn_Altas_Open_Click(object sender, RoutedEventArgs e)
         {
            bool isSelect = SelectFile("Spine Altas File (*.atlas, *.atlas.txt)|*.atlas;*.atlas.txt", tb_Atlas_File);
-
             if (isSelect)
             {
                 App.globalValues.SelectAtlasFile = tb_Atlas_File.Text;
@@ -68,6 +71,8 @@ namespace SpineViewerWPF.Windows
                 else
                 {
                     tb_JS_file.Text = App.globalValues.SelectSpineFile;
+                    if (cb_detect.IsChecked.Value)
+                        Autodetect();
                 }
                 //var atlasSize = Common.GetAtlasSize(App.globalValues.SelectAtlasFile);
                 //if (atlasSize != null)
@@ -75,6 +80,69 @@ namespace SpineViewerWPF.Windows
                 //    tb_Canvas_X.Text = atlasSize.Value.Width.ToString();
                 //    tb_Canvas_Y.Text = atlasSize.Value.Height.ToString();
                 //}
+            }
+        }
+
+        private void Autodetect()
+        {
+            if (File.Exists(App.globalValues.SelectSpineFile))
+            {
+                bool detectSuccess = false;
+                App.globalValues.SkeletonHeader = new PublicFunction.SkeletonBinaryHeader();
+                if (Common.IsBinaryData(App.globalValues.SelectSpineFile))
+                {
+                    FileStream fs = new FileStream(App.globalValues.SelectSpineFile, FileMode.Open);
+                    
+                    if (App.globalValues.SkeletonHeader.ReadFromBinary(fs))
+                    {
+                        detectSuccess = true;
+                    }
+                    fs.Close();
+                }
+                else
+                {
+                    string jsonText = File.ReadAllText(App.globalValues.SelectSpineFile);
+                    if (App.globalValues.SkeletonHeader.ReadFromJSON(jsonText))
+                    {
+                        detectSuccess = true;
+                    }
+                }
+
+                if (detectSuccess)
+                {
+                    int w = Convert.ToInt32(App.globalValues.SkeletonHeader.Width);
+                    int h = Convert.ToInt32(App.globalValues.SkeletonHeader.Height);
+                    if (w > 4096 || h > 4096)
+                    {
+                        if (w > 4096 && w > h)
+                        {
+                            float scale = (float)Math.Truncate((4096f / w) * 100f) / 100f;
+                            w = 4096;
+                            h = (int)(h * scale);
+                            tb_Canvas_scale.Text = scale.ToString();
+                        }
+                        else
+                        {
+                            float scale = (float)Math.Truncate((4096f / h) * 100f) / 100f;
+                            h = 4096;
+                            w = (int)(w * scale);
+                            tb_Canvas_scale.Text = scale.ToString();
+                        }
+                    }
+                    tb_Canvas_X.Text = w.ToString();
+                    tb_Canvas_Y.Text = h.ToString();
+                    if (Common.SpineVersions.Contains(App.globalValues.SkeletonHeader.Version))
+                    {
+                        cb_Version.SelectedItem = App.globalValues.SkeletonHeader.Version;
+                    }
+                    else
+                    {
+                        string v = Common.SpineVersions.LastOrDefault(a => a.Substring(0, 3) == App.globalValues.SkeletonHeader.Version.Substring(0, 3));
+                        if (!string.IsNullOrEmpty(v))
+                            cb_Version.SelectedValue = v;
+                    }
+
+                }
             }
         }
 
@@ -129,7 +197,8 @@ namespace SpineViewerWPF.Windows
 
             double setWidth;
             double setHeight;
-            if (!double.TryParse(tb_Canvas_X.Text,out setWidth) || !double.TryParse(tb_Canvas_Y.Text, out setHeight))
+            double scale;
+            if (!double.TryParse(tb_Canvas_X.Text,out setWidth) || !double.TryParse(tb_Canvas_Y.Text, out setHeight) || !double.TryParse(tb_Canvas_scale.Text, out scale))
             {
                 System.Windows.MessageBox.Show("Please Set Currect Canvas Value！");
                 return;
@@ -138,6 +207,7 @@ namespace SpineViewerWPF.Windows
             App.globalValues.FrameHeight = setHeight;
             App.canvasWidth = setWidth;
             App.canvasHeight = setHeight;
+            App.globalValues.Scale = (float)scale;
             App.isNew = true;
 
             if (tb_Muilt_Texture.Text.Trim() != "")

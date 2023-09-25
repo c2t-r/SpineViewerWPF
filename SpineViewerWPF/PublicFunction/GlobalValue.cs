@@ -1,4 +1,5 @@
 ﻿using Microsoft.Xna.Framework.Graphics;
+using SpineViewerWPF.PublicFunction;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -48,6 +49,8 @@ public class GlobalValue : INotifyPropertyChanged
     private bool _UseCache = false;
 
     private List<Texture2D> _GifList;
+
+    public SkeletonBinaryHeader SkeletonHeader { get; set; }
 
 
     public string SelectAtlasFile

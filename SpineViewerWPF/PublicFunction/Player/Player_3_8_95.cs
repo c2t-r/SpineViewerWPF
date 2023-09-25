@@ -96,6 +96,8 @@ public class Player_3_8_95 : IPlayer
         {
             App.globalValues.PosX = (float)App.canvasWidth/2;
             App.globalValues.PosY = (float)App.canvasHeight/2;
+            //App.globalValues.PosX = 0;
+            //App.globalValues.PosY = App.globalValues.SkeletonHeader.Height * App.globalValues.Scale;
             //App.globalValues.PosX = ((float)App.canvasWidth / 2) - (skeletonData.Width / 2) - skeletonData.X;
             //App.globalValues.PosY = (float)App.canvasHeight - skeletonData.height - skeletonData.Y;
             MainWindow.SetCBAnimeName();

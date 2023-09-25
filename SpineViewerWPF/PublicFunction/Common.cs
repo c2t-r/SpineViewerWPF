@@ -22,11 +22,14 @@ public class Common
     public static string[] SpineFileExtensions = { ".skel.bytes", ".json", ".skel", ".bytes", ".bin" };
     public static string[] AtlasFileExtension = { ".atlas.txt", ".atlas" };
 
+    public static string[] SpineVersions = { "2.1.08", "2.1.25", "3.1.07", "3.2.xx", "3.4.02", "3.5.51", "3.6.32", "3.6.39", "3.6.53", "3.7.94", "3.8.95", "4.0.31", "4.0.64", "4.1.00" };
+
     public static void Reset()
     {
         App.globalValues.PosX = 0;
         App.globalValues.PosY = 0;
-        App.globalValues.Scale = 1;
+        if (App.globalValues.Scale == 0)
+            App.globalValues.Scale = 1;
         App.globalValues.ViewScale = 1;
         App.globalValues.SelectAnimeName = "";
         App.globalValues.SelectSkin = "";
