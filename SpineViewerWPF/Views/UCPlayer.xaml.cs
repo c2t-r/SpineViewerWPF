@@ -92,11 +92,21 @@ namespace SpineViewerWPF.Views
             App.appXC.Width = App.globalValues.FrameWidth;
             App.appXC.Height = App.globalValues.FrameHeight;
 
+            var transformGroupL = (TransformGroup)Frame.LayoutTransform;
+            var st = (ScaleTransform)transformGroupL.Children.Where(x => x.GetType() == typeof(ScaleTransform)).FirstOrDefault();
+            App.globalValues.ViewScale = App.globalValues.Scale;
+            st.ScaleX = App.globalValues.ViewScale;
+            st.ScaleY = App.globalValues.ViewScale;
+
+
             var transformGroup = (TransformGroup)Frame.RenderTransform;
             var tt = (TranslateTransform)transformGroup.Children.Where(x => x.GetType() == typeof(TranslateTransform)).FirstOrDefault();
-            tt.X = (float)((App.mainWidth ) / 2 - (App.canvasWidth / 2) -10);
-            tt.Y = (float)((App.mainHeight ) / 2 - (App.canvasHeight / 2)-40);
+            tt.X = (float)((App.mainWidth ) / 2 - ((App.canvasWidth * App.globalValues.Scale) / 2) -10);
+            tt.Y = (float)((App.mainHeight ) / 2 - ((App.canvasHeight * App.globalValues.Scale) / 2)-40);
 
+
+            //Frame.Width = Frame.ActualWidth;
+            //Frame.Height = Frame.ActualHeight;
             Frame.Children.Add(App.appXC);
 
         }
@@ -157,12 +167,13 @@ namespace SpineViewerWPF.Views
         {
             var transformGroupL = (TransformGroup)Frame.LayoutTransform;
             var st = (ScaleTransform)transformGroupL.Children.Where(x => x.GetType() == typeof(ScaleTransform)).FirstOrDefault();
-            st.ScaleX = 1;
-            st.ScaleY = 1;
+            App.globalValues.ViewScale = App.globalValues.Scale;
+            st.ScaleX = App.globalValues.ViewScale;
+            st.ScaleY = App.globalValues.ViewScale;
             var transformGroupR = (TransformGroup)Frame.RenderTransform;
             var tt = (TranslateTransform)transformGroupR.Children.Where(x => x.GetType() == typeof(TranslateTransform)).FirstOrDefault();
-            tt.X = (float)((App.mainWidth) / 2 - (App.canvasWidth / 2) - 10);
-            tt.Y = (float)((App.mainHeight) / 2 - (App.canvasHeight / 2) - 40);
+            tt.X = (float)((App.mainWidth) / 2 - ((App.canvasWidth * App.globalValues.Scale) / 2) - 10);
+            tt.Y = (float)((App.mainHeight) / 2 - ((App.canvasHeight * App.globalValues.Scale) / 2) - 40);
             Frame.Children.Remove(App.appXC);
             App.appXC.Initialize -= player.Initialize;
             App.appXC.Update -= player.Update;
