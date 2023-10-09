@@ -1,0 +1,50 @@
+﻿<Window x:Class="SpineViewerWPF.Windows.BatchScreen"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:SpineViewerWPF.Windows"
+        mc:Ignorable="d"
+        Title="BatchScreen" Height="300" Width="600">
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="77*"/>
+            <ColumnDefinition Width="103*"/>
+            <ColumnDefinition Width="20*"/>
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="33*"/>
+            <RowDefinition Height="36*"/>
+            <RowDefinition Height="32*"/>
+            <RowDefinition Height="36*"/>
+            <RowDefinition Height="147*"/>
+        </Grid.RowDefinitions>
+        <Label Content="Spines catalog" HorizontalAlignment="Left" VerticalAlignment="Center" Width="116" Height="25"/>
+        <TextBox x:Name="tb_catalog" Grid.Column="1" HorizontalAlignment="Center" TextWrapping="Wrap" Text="-" VerticalAlignment="Center" Width="289" Height="25"/>
+        <Button x:Name="btn_SelectCatalog" Grid.Column="2" Content="..." HorizontalAlignment="Center" VerticalAlignment="Center" Width="40" Height="25" Click="btn_SelectCatalog_Click"/>
+        <Label Content="Spine Version：" Grid.Row="1" Grid.Column="0" HorizontalAlignment="Right" Margin="0,2,137,10" Width="94"/>
+        <ComboBox x:Name="cb_Version" HorizontalAlignment="Left" Grid.Row="1" VerticalAlignment="Center" Width="215" SelectedValuePath="Content" Margin="10,0,0,0" Grid.Column="1" Height="22">
+            <ComboBoxItem Content="2.1.08"/>
+            <ComboBoxItem Content="2.1.25"/>
+            <ComboBoxItem Content="3.1.07"/>
+            <ComboBoxItem Content="3.2.xx"/>
+            <ComboBoxItem Content="3.4.02"/>
+            <ComboBoxItem Content="3.5.51"/>
+            <ComboBoxItem Content="3.6.32"/>
+            <ComboBoxItem Content="3.6.39"/>
+            <ComboBoxItem Content="3.6.53"/>
+            <ComboBoxItem Content="3.7.94"/>
+            <ComboBoxItem Content="3.8.95"/>
+            <ComboBoxItem Content="4.0.31"/>
+            <ComboBoxItem Content="4.0.64"/>
+            <ComboBoxItem Content="4.1.00"/>
+        </ComboBox>
+        <Label Content="Screen all animations：" Grid.Row="2" Grid.Column="0" HorizontalAlignment="Left" Margin="0,2,0,6" Width="134"/>
+        <Label Content="Save images catalog" HorizontalAlignment="Left" VerticalAlignment="Center" Width="134" Height="25" Grid.Row="3"/>
+        <TextBox x:Name="tb_saveCatalog" Grid.Column="1" HorizontalAlignment="Center" TextWrapping="Wrap" Text="-" VerticalAlignment="Center" Width="289" Height="25" Grid.Row="3"/>
+        <Button x:Name="btn_SaveCatalog" Grid.Column="2" Content="..." HorizontalAlignment="Center" VerticalAlignment="Center" Width="40" Height="25" Grid.Row="3" Click="btn_SaveCatalog_Click"/>
+        <Button x:Name="btn_Start" Grid.Column="2" Content="Start" HorizontalAlignment="Center" VerticalAlignment="Top" Width="40" Height="25" Grid.Row="4" Margin="0,25,0,0" Click="btn_Start_Click"/>
+        <CheckBox x:Name="cb_allAnimations" Grid.Column="1" Content="" HorizontalAlignment="Left" Margin="10,11,0,0" Grid.Row="2" VerticalAlignment="Top"/>
+
+    </Grid>
+</Window>

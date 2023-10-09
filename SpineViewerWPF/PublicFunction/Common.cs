@@ -380,6 +380,29 @@ public class Common
 
     }
 
+    public static void SaveToPng(Texture2D texture2D, string savePath)
+    {
+        string fileName = GetFileNameNoEx(App.globalValues.SelectAtlasFile);
+        if (App.globalValues.SelectAnimeName != "")
+            fileName += $"_{App.globalValues.SelectAnimeName}";
+        if (App.globalValues.SelectSkin != "")
+            fileName += $"_{App.globalValues.SelectSkin}";
+
+        string resFile = Path.Combine(savePath, fileName + ".png");
+        if (File.Exists(resFile))
+        {
+            int index = 1;
+            while (File.Exists(resFile = Path.Combine(savePath, fileName + $"({index}).png")))
+            {
+                index++;
+            }
+        }
+        using (FileStream fs = new FileStream(resFile, FileMode.Create))
+        {
+            texture2D.SaveAsPng(fs, texture2D.Width, texture2D.Height);
+        }
+    }
+
     public static void TakeRecodeScreenshot(GraphicsDevice _graphicsDevice)
     {
         var wpfRenderTarget = (RenderTarget2D)_graphicsDevice.GetRenderTargets()[0].RenderTarget;
@@ -419,7 +442,7 @@ public class Common
         }
     }
 
-    public static void TakeScreenshot()
+    public static void TakeScreenshot(string savePath = "")
     {
         float bakTimeScale = App.globalValues.TimeScale;
 
@@ -444,7 +467,12 @@ public class Common
             renderTarget.GetData(screenData);
             Texture2D texture = new Texture2D(_graphicsDevice, _graphicsDevice.PresentationParameters.BackBufferWidth, _graphicsDevice.PresentationParameters.BackBufferHeight, false, _graphicsDevice.PresentationParameters.BackBufferFormat);
             texture.SetData(screenData);
-            Common.SaveToPng(texture);
+            if (string.IsNullOrEmpty(savePath))
+                Common.SaveToPng(texture);
+            else
+            {
+                Common.SaveToPng(texture, savePath);
+            }
             texture.Dispose();
         }
         App.globalValues.TimeScale = bakTimeScale;

@@ -101,6 +101,9 @@
     <Reference Include="System.Xaml">
       <RequiredTargetFramework>4.0</RequiredTargetFramework>
     </Reference>
+    <Reference Include="Translator">
+      <HintPath>M:\Флешка\GoogleTranslate\GoogleTranslate\bin\Debug\Translator.dll</HintPath>
+    </Reference>
     <Reference Include="WindowsBase" />
     <Reference Include="PresentationCore" />
     <Reference Include="PresentationFramework" />
@@ -113,6 +116,7 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="PublicFunction\AutodetectInfo.cs" />
     <Compile Include="PublicFunction\BlendXna.cs" />
     <Compile Include="PublicFunction\Common.cs" />
     <Compile Include="PublicFunction\GlobalValue.cs" />
@@ -736,6 +740,9 @@
     <Compile Include="Views\UCPlayer.xaml.cs">
       <DependentUpon>UCPlayer.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Windows\BatchScreen.xaml.cs">
+      <DependentUpon>BatchScreen.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Windows\Open.xaml.cs">
       <DependentUpon>Open.xaml</DependentUpon>
     </Compile>
@@ -752,6 +759,10 @@
       <SubType>Code</SubType>
     </Compile>
     <Page Include="Views\UCPlayer.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Windows\BatchScreen.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

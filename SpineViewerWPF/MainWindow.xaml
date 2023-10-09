@@ -18,6 +18,7 @@
             <MenuItem Name="mi_File" Header="File" >
                 <MenuItem Name="mi_File_Load" Header="Open Spine" Click="loadFileToolStripMenuItem_Click" >
                 </MenuItem>
+                <MenuItem x:Name="mi_BatchScreen" Header="Batch screen" Click="mi_BatchScreen_Click"/>
                 <Separator />
                 <MenuItem Name="mi_Exit" Header="Exit"  Click="mi_Exit_Click"  >
                 </MenuItem>
@@ -69,7 +70,8 @@
             <Grid Name="GridAttributes" >
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="280" MinWidth="34"></ColumnDefinition>
-                    <ColumnDefinition Width="*" ></ColumnDefinition>
+                    <ColumnDefinition Width="462*" ></ColumnDefinition>
+                    <ColumnDefinition Width="59*"/>
                 </Grid.ColumnDefinitions>
 
                 <Rectangle Grid.Column="0" Grid.Row="0">
@@ -237,8 +239,8 @@
                     </TabItem>
                     <TabItem Name="ti_Hide" Visibility="Hidden" />
                 </TabControl>
-                <Button Name="btn_Exporer" Width="10" HorizontalAlignment="Right" Height="70" Content="||" Click="Btn_Exporer_Click" />
-                <GridSplitter Name="gs_Control" Grid.Column="0" Width="3" Grid.RowSpan="2" DragCompleted="GridSplitter_DragCompleted" Background="#FFDFDFDF"  />
+                <Button Name="btn_Exporer" Width="10" HorizontalAlignment="Left" Height="70" Content="||" Click="Btn_Exporer_Click" Margin="270,288,0,289" />
+                <GridSplitter Name="gs_Control" Grid.Column="0" Width="3" DragCompleted="GridSplitter_DragCompleted" Background="#FFDFDFDF" HorizontalAlignment="Left" Margin="277,0,0,0"  />
 
             </Grid>
 

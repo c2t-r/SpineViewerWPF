@@ -91,7 +91,6 @@ namespace SpineViewerWPF.Views
             App.appXC.Draw += player.Draw;
             App.appXC.Width = App.globalValues.FrameWidth;
             App.appXC.Height = App.globalValues.FrameHeight;
-
             var transformGroupL = (TransformGroup)Frame.LayoutTransform;
             var st = (ScaleTransform)transformGroupL.Children.Where(x => x.GetType() == typeof(ScaleTransform)).FirstOrDefault();
             App.globalValues.ViewScale = App.globalValues.Scale;

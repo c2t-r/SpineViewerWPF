@@ -11,7 +11,7 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
-using System.Windows.Shapes;
+//using System.Windows.Shapes;
 using SpineViewerWPF.Views;
 using Microsoft.Win32;
 using WpfXnaControl;
@@ -20,6 +20,8 @@ using System.IO;
 using Microsoft.Xna.Framework;
 using SpineViewerWPF.Windows;
 using Microsoft.Xna.Framework.Graphics;
+using SpineViewerWPF.PublicFunction;
+using System.Threading;
 
 namespace SpineViewerWPF
 {
@@ -225,10 +227,132 @@ namespace SpineViewerWPF
 
         }
 
+        public async Task StartBatchScreen(string spineVersion, string spineCatalog, string saveCatalog, bool screenAllImages)
+        {
+            string[] allAtlas = FindAllAtlasInDir(spineCatalog);
+            foreach (var atlasFile in allAtlas)
+            {
+                string curDir = Path.GetDirectoryName(atlasFile);
+                string safeName = Path.GetFileName(atlasFile);
+                safeName = safeName.Substring(0, safeName.IndexOf('.'));
+                string[] allFoundFiles = Directory.GetFiles(curDir, $"{safeName}.*", SearchOption.TopDirectoryOnly);
+                string spineFile = allFoundFiles.FirstOrDefault(a => Common.SpineFileExtensions.Contains(Path.GetExtension(a)));
+                if (string.IsNullOrEmpty(spineFile))
+                    continue;
+
+                var spineParams = AutodetectSpineParams(spineFile);
+                if (string.IsNullOrEmpty(spineParams.Version))
+                    continue;
+                App.globalValues.SelectSpineFile = spineFile;
+                App.globalValues.SelectAtlasFile = atlasFile;
+                App.globalValues.SelectSpineVersion = spineVersion;
+                App.globalValues.FrameWidth = spineParams.Width;
+                App.globalValues.FrameHeight = spineParams.Height;
+                App.canvasWidth = spineParams.Width;
+                App.canvasHeight = spineParams.Height;
+                App.globalValues.Scale = (float)spineParams.Scale;
+                App.isNew = true;
+                LoadPlayer(spineVersion);
+                //Thread.Sleep(1000);
+                App.appXC.Loaded += AppXC_Loaded;
+                await Task.Run(async () =>
+                {
+                    while (!loaded)
+                    {
+                        await Task.Delay(100);
+                    }
+                    Common.TakeScreenshot(saveCatalog);
+                });
+            }
+        }
+        bool loaded = false;
+        private void AppXC_Loaded(object sender, RoutedEventArgs e)
+        {
+            loaded = true;
+        }
+
+        private string[] FindAllAtlasInDir(string dir)
+        {
+            string[] allFiles = Directory.GetFiles(dir, "*.*", SearchOption.AllDirectories);
+            List<string> filteredFiles = new List<string>();
+            foreach (var item in allFiles)
+            {
+                foreach (var ext in Common.AtlasFileExtension)
+                {
+                    if(item.EndsWith(ext))
+                        filteredFiles.Add(item);
+                }
+            }
+            return filteredFiles.ToArray();
+
+        }
 
 
+        private AutodetectInfo AutodetectSpineParams(string spineFile)
+        {
+            AutodetectInfo info = new AutodetectInfo();
+            info.SpineFile = spineFile;
+            if (File.Exists(spineFile))
+            {
+                bool detectSuccess = false;
+                App.globalValues.SkeletonHeader = new PublicFunction.SkeletonBinaryHeader();
+                if (Common.IsBinaryData(spineFile))
+                {
+                    FileStream fs = new FileStream(spineFile, FileMode.Open);
 
+                    if (App.globalValues.SkeletonHeader.ReadFromBinary(fs))
+                    {
+                        detectSuccess = true;
+                    }
+                    fs.Close();
+                }
+                else
+                {
+                    string jsonText = File.ReadAllText(spineFile);
+                    if (App.globalValues.SkeletonHeader.ReadFromJSON(jsonText))
+                    {
+                        detectSuccess = true;
+                    }
+                }
 
+                if (detectSuccess)
+                {
+                    int w = Convert.ToInt32(App.globalValues.SkeletonHeader.Width);
+                    int h = Convert.ToInt32(App.globalValues.SkeletonHeader.Height);
+                    if (w > 4096 || h > 4096)
+                    {
+                        if (w > 4096 && w > h)
+                        {
+                            float scale = (float)Math.Truncate((4096f / w) * 100f) / 100f;
+                            w = 4096;
+                            h = (int)(h * scale);
+                            info.Scale = scale;
+                        }
+                        else
+                        {
+                            float scale = (float)Math.Truncate((4096f / h) * 100f) / 100f;
+                            h = 4096;
+                            w = (int)(w * scale);
+                            info.Scale = scale;
+                        }
+                    }
+                    info.Width = w;
+                    info.Height = h;
+                    if (Common.SpineVersions.Contains(App.globalValues.SkeletonHeader.Version))
+                    {
+                        info.Version = App.globalValues.SkeletonHeader.Version;
+                    }
+                    else
+                    {
+                        string v = Common.SpineVersions.LastOrDefault(a => a.Substring(0, 3) == App.globalValues.SkeletonHeader.Version.Substring(0, 3));
+                        if (!string.IsNullOrEmpty(v))
+                            info.Version = v;
+                    }
+
+                }
+            }
+            return info;
+        }
 
         private void cb_export_type_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
@@ -408,6 +532,10 @@ namespace SpineViewerWPF
             }
         }
 
-
+        private void mi_BatchScreen_Click(object sender, RoutedEventArgs e)
+        {
+            BatchScreen screen = new BatchScreen(this);
+            screen.Show();
+        }
     }
 }
