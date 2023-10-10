@@ -208,6 +208,7 @@ namespace SpineViewerWPF.Windows
             App.canvasWidth = setWidth;
             App.canvasHeight = setHeight;
             App.globalValues.Scale = (float)scale;
+            App.globalValues.CoordinatedInCenter = rb_center.IsChecked.Value;
             App.isNew = true;
 
             if (tb_Muilt_Texture.Text.Trim() != "")

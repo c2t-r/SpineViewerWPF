@@ -95,10 +95,16 @@ public class Player_3_8_95 : IPlayer
 
         if (App.isNew)
         {
-            //App.globalValues.PosX = (float)App.canvasWidth/2;
-            //App.globalValues.PosY = (float)App.canvasHeight/2;
-            App.globalValues.PosX = 0;
-            App.globalValues.PosY = App.globalValues.SkeletonHeader.Height * App.globalValues.Scale;
+            if (App.globalValues.CoordinatedInCenter)
+            {
+                App.globalValues.PosX = (float)App.canvasWidth / 2;
+                App.globalValues.PosY = (float)App.canvasHeight / 2;
+            }
+            else
+            {
+                App.globalValues.PosX = 0;
+                App.globalValues.PosY = App.globalValues.SkeletonHeader.Height * App.globalValues.Scale;
+            }
             //App.globalValues.PosX = ((float)App.canvasWidth / 2) - (skeletonData.Width / 2) - skeletonData.X;
             //App.globalValues.PosY = (float)App.canvasHeight - skeletonData.height - skeletonData.Y;
             MainWindow.SetCBAnimeName();
@@ -117,6 +123,10 @@ public class Player_3_8_95 : IPlayer
             skeleton.SetToSetupPose();
             state.SetAnimation(0, App.globalValues.SelectAnimeName, App.globalValues.IsLoop);
             App.globalValues.SetAnime = false;
+            if (App.globalValues.NeedSaveScreenshots && !App.globalValues.IsGetScreenshot)
+            {
+                App.globalValues.IsGetScreenshot = true;
+            }
         }
 
         if (App.globalValues.SelectSkin != "" && App.globalValues.SetSkin)
@@ -124,6 +134,10 @@ public class Player_3_8_95 : IPlayer
             skeleton.SetSkin(App.globalValues.SelectSkin);
             skeleton.SetSlotsToSetupPose();
             App.globalValues.SetSkin = false;
+            if (App.globalValues.NeedSaveScreenshots && !App.globalValues.IsGetScreenshot)
+            {
+                App.globalValues.IsGetScreenshot = true;
+            }
         }
 
 
@@ -184,6 +198,12 @@ public class Player_3_8_95 : IPlayer
         skeletonRenderer.Begin();
         skeletonRenderer.Draw(skeleton);
         skeletonRenderer.End();
+
+        if (!string.IsNullOrEmpty(App.globalValues.ScreenshotSaveDir) && App.globalValues.NeedSaveScreenshots && App.globalValues.IsGetScreenshot)
+        {
+            App.globalValues.IsGetScreenshot = false;
+            Common.TakeScreenshot(App.globalValues.ScreenshotSaveDir);
+        }
 
         if (state != null)
         {

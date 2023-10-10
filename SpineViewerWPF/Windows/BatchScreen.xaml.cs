@@ -49,7 +49,14 @@ namespace SpineViewerWPF.Windows
             string spineCatalog = tb_catalog.Text;
             string saveCatalog = tb_saveCatalog.Text;
 
-            _window.StartBatchScreen(cb_Version.SelectionBoxItem.ToString(), spineCatalog, saveCatalog, saveAllAnimations);
+            int w = Convert.ToInt32(tb_width.Text);
+            int h = Convert.ToInt32(tb_height.Text);
+            App.globalValues.FrameWidth = w;
+            App.globalValues.FrameHeight = h;
+            App.canvasWidth = w;
+            App.canvasHeight = h;
+            App.globalValues.CoordinatedInCenter = rb_center.IsChecked.Value;
+            _window.StartBatchScreen(cb_Version.SelectionBoxItem.ToString(), spineCatalog, saveCatalog, saveAllAnimations, cb_autodetect.IsChecked.Value);
             this.Close();
         }
     }

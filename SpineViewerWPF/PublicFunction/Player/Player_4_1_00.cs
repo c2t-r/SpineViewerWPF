@@ -93,8 +93,16 @@ public class Player_4_1_00 : IPlayer
 
         if (App.isNew)
         {
-            App.globalValues.PosX = (float)App.canvasWidth/2;
-            App.globalValues.PosY = (float)App.canvasHeight/2;
+            if (App.globalValues.CoordinatedInCenter)
+            {
+                App.globalValues.PosX = (float)App.canvasWidth / 2;
+                App.globalValues.PosY = (float)App.canvasHeight / 2;
+            }
+            else
+            {
+                App.globalValues.PosX = 0;
+                App.globalValues.PosY = App.globalValues.SkeletonHeader.Height * App.globalValues.Scale;
+            }
             MainWindow.SetCBAnimeName();
         }
         App.isNew = false;

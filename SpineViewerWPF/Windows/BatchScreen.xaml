@@ -17,7 +17,9 @@
             <RowDefinition Height="36*"/>
             <RowDefinition Height="32*"/>
             <RowDefinition Height="36*"/>
-            <RowDefinition Height="147*"/>
+            <RowDefinition Height="33*"/>
+            <RowDefinition Height="39*"/>
+            <RowDefinition Height="75*"/>
         </Grid.RowDefinitions>
         <Label Content="Spines catalog" HorizontalAlignment="Left" VerticalAlignment="Center" Width="116" Height="25"/>
         <TextBox x:Name="tb_catalog" Grid.Column="1" HorizontalAlignment="Center" TextWrapping="Wrap" Text="-" VerticalAlignment="Center" Width="289" Height="25"/>
@@ -43,8 +45,19 @@
         <Label Content="Save images catalog" HorizontalAlignment="Left" VerticalAlignment="Center" Width="134" Height="25" Grid.Row="3"/>
         <TextBox x:Name="tb_saveCatalog" Grid.Column="1" HorizontalAlignment="Center" TextWrapping="Wrap" Text="-" VerticalAlignment="Center" Width="289" Height="25" Grid.Row="3"/>
         <Button x:Name="btn_SaveCatalog" Grid.Column="2" Content="..." HorizontalAlignment="Center" VerticalAlignment="Center" Width="40" Height="25" Grid.Row="3" Click="btn_SaveCatalog_Click"/>
-        <Button x:Name="btn_Start" Grid.Column="2" Content="Start" HorizontalAlignment="Center" VerticalAlignment="Top" Width="40" Height="25" Grid.Row="4" Margin="0,25,0,0" Click="btn_Start_Click"/>
-        <CheckBox x:Name="cb_allAnimations" Grid.Column="1" Content="" HorizontalAlignment="Left" Margin="10,11,0,0" Grid.Row="2" VerticalAlignment="Top"/>
+        <Button x:Name="btn_Start" Grid.Column="2" Content="Start" HorizontalAlignment="Center" VerticalAlignment="Top" Width="40" Height="25" Grid.Row="6" Margin="0,10,0,0" Click="btn_Start_Click"/>
+        <CheckBox x:Name="cb_allAnimations" Grid.Column="1" Content="" HorizontalAlignment="Left" Margin="10,11,0,0" Grid.Row="2" VerticalAlignment="Top" Height="15" Width="20"/>
+        <CheckBox x:Name="cb_autodetect" Content="Autodetect canvas size" HorizontalAlignment="Left" Grid.Row="4" VerticalAlignment="Center" Height="15" Width="141"/>
+        <StackPanel Grid.Column="1" Grid.Row="3" Orientation="Horizontal" Margin="0,36,0,0" Grid.RowSpan="2">
+            <TextBox x:Name="tb_width" TextWrapping="Wrap" Text="1920" Width="53" Height="33"/>
+            <Label Content="X"/>
+            <TextBox x:Name="tb_height" TextWrapping="Wrap" Text="1080" Width="53" Height="33"/>
+        </StackPanel>
+        <Label Content="Initial coordinates" HorizontalAlignment="Left" VerticalAlignment="Center" Width="134" Height="25" Grid.Row="5"/>
+        <StackPanel Grid.Column="1" Grid.Row="4" Margin="0,33,0,0" Grid.RowSpan="2">
+            <RadioButton x:Name="rb_zero" Content="Zero" IsChecked="True"/>
+            <RadioButton x:Name="rb_center" Content="Center"/>
+        </StackPanel>
 
     </Grid>
 </Window>

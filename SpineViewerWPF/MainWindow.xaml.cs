@@ -227,9 +227,10 @@ namespace SpineViewerWPF
 
         }
 
-        public async Task StartBatchScreen(string spineVersion, string spineCatalog, string saveCatalog, bool screenAllImages)
+        public async Task StartBatchScreen(string spineVersion, string spineCatalog, string saveCatalog, bool screenAllImages, bool autodetectCanvas)
         {
             string[] allAtlas = FindAllAtlasInDir(spineCatalog);
+            
             foreach (var atlasFile in allAtlas)
             {
                 string curDir = Path.GetDirectoryName(atlasFile);
@@ -246,23 +247,44 @@ namespace SpineViewerWPF
                 App.globalValues.SelectSpineFile = spineFile;
                 App.globalValues.SelectAtlasFile = atlasFile;
                 App.globalValues.SelectSpineVersion = spineVersion;
-                App.globalValues.FrameWidth = spineParams.Width;
-                App.globalValues.FrameHeight = spineParams.Height;
-                App.canvasWidth = spineParams.Width;
-                App.canvasHeight = spineParams.Height;
-                App.globalValues.Scale = (float)spineParams.Scale;
+                if (autodetectCanvas)
+                {
+                    App.globalValues.FrameWidth = spineParams.Width;
+                    App.globalValues.FrameHeight = spineParams.Height;
+                    App.canvasWidth = spineParams.Width;
+                    App.canvasHeight = spineParams.Height;
+                    App.globalValues.Scale = (float)spineParams.Scale;
+                }
                 App.isNew = true;
                 LoadPlayer(spineVersion);
-                //Thread.Sleep(1000);
+                await Task.Delay(100);
                 App.appXC.Loaded += AppXC_Loaded;
-                await Task.Run(async () =>
+                App.globalValues.NeedSaveScreenshots = true;
+                App.globalValues.IsGetScreenshot = true;
+                App.globalValues.ScreenshotSaveDir = saveCatalog;
+                await Task.Delay(500);
+                if (screenAllImages)
                 {
-                    while (!loaded)
+                    await Task.Run(async () =>
                     {
-                        await Task.Delay(100);
-                    }
-                    Common.TakeScreenshot(saveCatalog);
-                });
+                        while (!loaded)
+                        {
+                            await Task.Delay(100);
+                        }
+                        await Task.Delay(300);
+
+                        for (int i = 0; i < cb_AnimeList.Items.Count; i++)
+                        {
+                            App.globalValues.SelectAnimeName = cb_AnimeList.Items[i].ToString();
+                            App.globalValues.SetAnime = true;
+                            while (App.globalValues.SetAnime)
+                            {
+                                await Task.Delay(200);
+                            }
+                        }
+
+                    });
+                }
             }
         }
         bool loaded = false;

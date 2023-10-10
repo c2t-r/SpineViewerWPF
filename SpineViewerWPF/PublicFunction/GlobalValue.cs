@@ -47,6 +47,11 @@ public class GlobalValue : INotifyPropertyChanged
     private float _RedcodePanelWidth = 280f;
     private float _Rotation = 0;
     private bool _UseCache = false;
+    private bool _coordInCenter = true;
+
+    private string _screenSaveDir = "";
+    private bool _needSaveScreenshots = false;
+    private bool _getScreen = true;
 
     private List<Texture2D> _GifList;
 
@@ -65,6 +70,54 @@ public class GlobalValue : INotifyPropertyChanged
             {
                 _SelectAtlasFile = value;
                 OnPropertyChanged("SelectAtlasFile");
+            }
+        }
+    }
+
+    public string ScreenshotSaveDir
+    {
+        get
+        {
+            return _screenSaveDir;
+        }
+        set
+        {
+            if (_screenSaveDir != value)
+            {
+                _screenSaveDir = value;
+                OnPropertyChanged("ScreenshotSaveDir");
+            }
+        }
+    }
+
+    public bool IsGetScreenshot
+    {
+        get
+        {
+            return _getScreen;
+        }
+        set
+        {
+            if (_getScreen != value)
+            {
+                _getScreen = value;
+                OnPropertyChanged("IsGetScreenshot");
+            }
+        }
+    }
+
+    public bool NeedSaveScreenshots
+    {
+        get
+        {
+            return _needSaveScreenshots;
+        }
+        set
+        {
+            if (_needSaveScreenshots != value)
+            {
+                _needSaveScreenshots = value;
+                OnPropertyChanged("NeedSaveScreenshots");
             }
         }
     }
@@ -254,6 +307,22 @@ public class GlobalValue : INotifyPropertyChanged
             {
                 _Alpha = value;
                 OnPropertyChanged("Alpha");
+            }
+        }
+    }
+
+    public bool CoordinatedInCenter
+    {
+        get
+        {
+            return _coordInCenter;
+        }
+        set
+        {
+            if (_coordInCenter != value)
+            {
+                _coordInCenter = value;
+                OnPropertyChanged("CoordinatedInCenter");
             }
         }
     }
